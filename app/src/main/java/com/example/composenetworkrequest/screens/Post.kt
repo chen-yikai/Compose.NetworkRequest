@@ -17,6 +17,7 @@ import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Check
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
@@ -42,6 +43,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -74,29 +76,29 @@ fun PostScreen(padding: PaddingValues) {
     }
 
 
-    LazyColumn(contentPadding = padding, modifier = Modifier.padding(horizontal = 10.dp)) {
+    LazyColumn(contentPadding = PaddingValues(bottom = padding.calculateBottomPadding())) {
         stickyHeader {
-            Spacer(Modifier.height(30.dp))
             Card(
                 modifier = Modifier
-                    .padding(vertical = 10.dp)
                     .fillMaxWidth(),
                 colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.secondaryContainer),
                 elevation = CardDefaults.cardElevation(defaultElevation = 20.dp)
             ) {
-                Column(Modifier.padding(10.dp)) {
+                Column(Modifier.padding(10.dp).padding(top = padding.calculateTopPadding())) {
                     var name by remember { mutableStateOf("") }
                     var type by remember { mutableStateOf("") }
 
-                    Text("Todo", fontSize = 30.sp, fontWeight = FontWeight.Bold, fontFamily = CherryBomb)
+                    Text("Todo List", fontSize = 30.sp, fontWeight = FontWeight.Bold, fontFamily = CherryBomb, color = MaterialTheme.colorScheme.primary)
                     TextField(
                         name,
                         onValueChange = { name = it },
-                        label = { Text("Name") },
+                        label = { Text("Name", fontFamily = CherryBomb) },
                         colors = TextFieldDefaults.colors(
                             unfocusedContainerColor = MaterialTheme.colorScheme.secondaryContainer,
                             focusedContainerColor = MaterialTheme.colorScheme.secondaryContainer
                         ),
+                        singleLine = true,
+                        textStyle = TextStyle(fontFamily = CherryBomb, fontSize = 25.sp),
                         modifier = Modifier
                             .fillMaxWidth()
                             .padding(bottom = 5.dp)
@@ -104,7 +106,9 @@ fun PostScreen(padding: PaddingValues) {
                     TextField(
                         type,
                         onValueChange = { type = it },
-                        label = { Text("Type") },
+                        label = { Text("Type", fontFamily = CherryBomb) },
+                        textStyle = TextStyle(fontFamily = CherryBomb, fontSize = 20.sp),
+                        singleLine = true,
                         colors = TextFieldDefaults.colors(
                             unfocusedContainerColor = MaterialTheme.colorScheme.secondaryContainer,
                             focusedContainerColor = MaterialTheme.colorScheme.secondaryContainer
@@ -127,8 +131,11 @@ fun PostScreen(padding: PaddingValues) {
                 }
             }
         }
+        item{
+            Spacer(Modifier.height(15.dp))
+        }
         items(todos) {
-            Card(modifier = Modifier.padding(5.dp)) {
+            Card(modifier = Modifier.padding(10.dp).padding(horizontal = 2.dp)) {
                 Column(
                     modifier = Modifier
                         .padding(10.dp)
@@ -156,7 +163,7 @@ fun PostScreen(padding: PaddingValues) {
                             }
                         }) {
                             Icon(
-                                Icons.Default.Delete,
+                                Icons.Default.Check,
                                 contentDescription = null
                             )
                         }
@@ -179,7 +186,7 @@ fun PostScreen(padding: PaddingValues) {
                         .fillMaxWidth(),
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
-                    Text("No todos found")
+                    Text("No todos found", fontFamily = CherryBomb)
                 }
             }
         } else if (todos.isEmpty() && loading) {
